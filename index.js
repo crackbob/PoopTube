@@ -417,8 +417,13 @@
         if (!document.querySelector("#modsBtn")) injectModsButton();
     }, 500);
 
-    window.onload = () => {
+    if (document.readyState == "complete") {
         document.head.appendChild(style);
         document.body.appendChild(panel);
+    } else {
+        window.onload = () => {
+            document.head.appendChild(style);
+            document.body.appendChild(panel);
+        }
     }
 })();
