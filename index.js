@@ -140,8 +140,28 @@
     });
 
     let mods = {
-        "Ad Blocker": { enabled: false, onEnable: () => {}, onDisable: () => {} },
-        "Real Picture in Picture": { enabled: false, onEnable: () => {}, onDisable: () => {} }
+        "New Player UI": { 
+            enabled: getStoredFlags()?.delhi_modern_web_player || false,
+            onEnable: () => {
+                experimentFlags["delhi_modern_web_player"] = true;
+                setExperimentFlag("delhi_modern_web_player", true);
+            },
+            onDisable: () => {
+                experimentFlags["delhi_modern_web_player"] = false;
+                setExperimentFlag("delhi_modern_web_player", false);
+            }
+        },
+        "New Icons": { 
+            enabled: getStoredFlags()?.enable_web_delhi_icons || false,
+            onEnable: () => {
+                experimentFlags["enable_web_delhi_icons"] = true;
+                setExperimentFlag("enable_web_delhi_icons", true);
+            },
+            onDisable: () => {
+                experimentFlags["enable_web_delhi_icons"] = false;
+                setExperimentFlag("enable_web_delhi_icons", false);
+            }
+        }
     };
 
     let panel = document.createElement("div");
