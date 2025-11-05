@@ -140,26 +140,25 @@
     });
 
     let mods = {
-        "New Player UI": { 
-            enabled: getStoredFlags()?.delhi_modern_web_player || false,
+        "New Player UI": {
+            enabled: getStoredFlags()?.delhi_modern_web_player ?? ytcfg?.data_?.EXPERIMENT_FLAGS?.delhi_modern_web_player_icons ?? false,
             onEnable: () => {
                 experimentFlags["delhi_modern_web_player"] = true;
                 setExperimentFlag("delhi_modern_web_player", true);
+                experimentFlags["delhi_modern_web_player_icons"] = true;
+                setExperimentFlag("delhi_modern_web_player_icons", true);
+                experimentFlags["enable_web_delhi_icons"] = true;
+                setExperimentFlag("enable_web_delhi_icons", true);
+                location.reload();
             },
             onDisable: () => {
                 experimentFlags["delhi_modern_web_player"] = false;
                 setExperimentFlag("delhi_modern_web_player", false);
-            }
-        },
-        "New Icons": { 
-            enabled: getStoredFlags()?.enable_web_delhi_icons || false,
-            onEnable: () => {
-                experimentFlags["enable_web_delhi_icons"] = true;
-                setExperimentFlag("enable_web_delhi_icons", true);
-            },
-            onDisable: () => {
+                experimentFlags["delhi_modern_web_player_icons"] = false;
+                setExperimentFlag("delhi_modern_web_player_icons", false);
                 experimentFlags["enable_web_delhi_icons"] = false;
                 setExperimentFlag("enable_web_delhi_icons", false);
+                location.reload();
             }
         }
     };
@@ -433,17 +432,28 @@
         rightButtons.prepend(modsBtn);
     }
 
+    document.addEventListener("click", (e) => {
+        const modsBtn = document.querySelector("#modsBtn");
+
+        if (panel.style.display === "none") return;
+        if (panel.contains(e.target) || modsBtn.contains(e.target)) return;
+
+        panel.style.display = "none";
+    });
+
+
+    function init () {
+        document.head.appendChild(style);
+        document.body.appendChild(panel);
+    }
+
     setInterval(() => {
         if (!document.querySelector("#modsBtn")) injectModsButton();
     }, 500);
 
     if (document.readyState == "complete") {
-        document.head.appendChild(style);
-        document.body.appendChild(panel);
+        init();
     } else {
-        window.onload = () => {
-            document.head.appendChild(style);
-            document.body.appendChild(panel);
-        }
+        window.onload = init;
     }
 })();
